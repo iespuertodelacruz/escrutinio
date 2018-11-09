@@ -46,9 +46,10 @@ class Counting(object):
         buf = []
         for k, v in sorted(
                 self.votes.items(), key=operator.itemgetter(1), reverse=True):
-            buf.append(f'{k}: {v}')
-        buf.append(crayons.white(f'{os.linesep}TOTAL VOTOS: ', bold=True) +
-                   crayons.cyan(f'{self.num_votes}', bold=True))
+            buf.append(f'{k}: ' + crayons.green(f'{v}', bold=True))
+        buf.append(
+            str(crayons.white(
+                f'{os.linesep}TOTAL VOTOS: {self.num_votes}', bold=True)))
         return os.linesep.join(buf)
 
 
