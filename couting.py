@@ -15,16 +15,20 @@ KEYS = {
 class Counting(object):
     def __init__(self, file):
         self.datafile = Path(file)
-        self.votes, self.num_votes = defaultdict(int), 0
+        votes, self.num_votes, keys = defaultdict(int), 0, self.get_keys()
         with open(self.datafile) as f:
             for line in f:
                 line = line.strip()
                 if line.startswith('#'):
                     continue
                 for choice in re.split(r'\s+', line):
-                    self.votes[choice] += 1
+                    if choice not in keys:
+                        sys.exit(crayons.red(
+                            (f'Clave <{choice}> no encontrada en el fichero '
+                             'de claves!!'), bold=True))
+                    votes[choice] += 1
                 self.num_votes += 1
-        self.votes = {v: self.votes[k] for k, v in self.get_keys().items()}
+        self.votes = {v: votes[k] for k, v in keys.items()}
 
     def get_keys(self):
         self.keyfile = self.datafile.parent / (self.datafile.stem + '.key')
